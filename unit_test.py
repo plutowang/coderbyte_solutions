@@ -1,5 +1,11 @@
 import unittest
+import ast
 import solution
+
+with open('solution.py') as f:
+    TREE = ast.parse(f.read())
+    COUNT = sum(isinstance(exp, ast.FunctionDef) for exp in TREE.body)
+    print('There are {} functions in solution.py'.format(COUNT))
 
 
 class Test(unittest.TestCase):
@@ -30,6 +36,25 @@ class Test(unittest.TestCase):
             ["[13, 4]", "[1, 2, 3, 6, 14]"]), "3,6")
         self.assertEqual(solution.ScaleBalancing(
             ["[5, 9]", "[1, 2, 6, 7]"]), "2,6")
+
+    def test_VowelSquare(self):
+        self.assertEqual(solution.VowelSquare(
+            ["abcd", "eikr", "oufj"]), '1-0')
+        self.assertEqual(solution.VowelSquare(
+            ["aqrst", "ukaei", "ffooo"]), '1-2')
+        self.assertEqual(solution.VowelSquare(["aaa", "eee"]), '0-0')
+        self.assertEqual(solution.VowelSquare(["aeooo", "ffffg"]), 'not found')
+
+    def test_ClosestEnemyII(self):
+        self.assertEqual(solution.ClosestEnemyII(["000", "100", "200"]), 1)
+        self.assertEqual(solution.ClosestEnemyII(
+            ["0000", "2010", "0000", "2002"]), 2)
+
+    def test_QuestionsMarks(self):
+        self.assertEqual(solution.QuestionsMarks('aa6?9'), 'false')
+        self.assertEqual(solution.QuestionsMarks(
+            'acc?7??sss?3rr1??????5'), 'true')
+        self.assertEqual(solution.QuestionsMarks('9???1???9??1???9'), 'false')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 {
     "python.linting.pylintArgs": [
-        "--load-plugins=pylint_django"
+        "--load-plugins=pylint_django",
+        "--disable=C0114,C0115,C0116",
     ],
     "python.linting.flake8Enabled": true,
     "python.formatting.provider": "autopep8",
