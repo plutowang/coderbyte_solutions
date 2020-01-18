@@ -5,7 +5,7 @@ import solution
 with open('solution.py') as f:
     TREE = ast.parse(f.read())
     COUNT = sum(isinstance(exp, ast.FunctionDef) for exp in TREE.body)
-    print('There are {} functions in solution.py'.format(COUNT))
+    print('\nThere are {} functions in solution.py\n{}'.format(COUNT, '='*70))
 
 
 class Test(unittest.TestCase):
@@ -55,6 +55,39 @@ class Test(unittest.TestCase):
         self.assertEqual(solution.QuestionsMarks(
             'acc?7??sss?3rr1??????5'), 'true')
         self.assertEqual(solution.QuestionsMarks('9???1???9??1???9'), 'false')
+
+    def test_FindIntersection(self):
+        self.assertEqual(solution.FindIntersection(
+            ["1, 3, 4, 7, 13", "1, 2, 4, 13, 15"]), '1,4,13')
+        self.assertEqual(solution.FindIntersection(
+            ["1, 3, 9, 10, 17, 18", "1, 4, 9, 10"]), '1,9,10')
+        self.assertEqual(solution.FindIntersection(["2, 3, 4", "3"]), '3')
+
+    def test_EquivalentKeypresses(self):
+        self.assertEqual(solution.EquivalentKeypresses(
+            ["a,b,c,d", "a,b,c,d,-B,d"]), 'true')
+        self.assertEqual(solution.EquivalentKeypresses(
+            ["c,a,r,d", "c,a,-B,r,d"]), 'false')
+        self.assertEqual(solution.EquivalentKeypresses(
+            ["q,w,e,r,t,y", "-B,-B,q,w,w,-B,e,r,t,y"]), 'true')
+        self.assertEqual(solution.EquivalentKeypresses(
+            ["", "-B,-B,-B"]), 'true')
+        self.assertEqual(solution.EquivalentKeypresses(
+            ["s,t,r,e,e,t", "-B,s,s,-B,t,r,e,e,t"]), 'true')
+
+    def test_KaprekarsConstant(self):
+        self.assertEqual(solution.KaprekarsConstant(2111), 5)
+        self.assertEqual(solution.KaprekarsConstant(9831), 7)
+        self.assertEqual(solution.KaprekarsConstant(3524), 3)
+
+    def test_ChessboardTraveling(self):
+        self.assertEqual(solution.ChessboardTraveling("(1 1)(3 3)"), 6)
+        self.assertEqual(solution.ChessboardTraveling("(2 2)(4 3)"), 3)
+
+    def test_MaximalSquare(self):
+        self.assertEqual(solution.MaximalSquare(
+            ["0111", "1111", "1111", "1111"]), 9)
+        self.assertEqual(solution.MaximalSquare(["0111", "1101", "0111"]), 1)
 
 
 if __name__ == '__main__':

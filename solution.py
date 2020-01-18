@@ -161,6 +161,13 @@ def ScaleBalancing(strArr):
     scale then your program should return the string not possible.
     """
     # code goes here
+    def add_two(ws, key):
+        for i, _ in enumerate(ws):
+            if key + ws[i] in ws[i+1::]:
+                return "{},{}".format(ws[i], key + ws[i])
+            if key - ws[i] in ws[i+1::]:
+                return "{},{}".format(ws[i], key - ws[i])
+
     target = abs(eval(strArr[0])[0] - eval(strArr[0])[1])
     ws = eval(strArr[1])
     if target in ws:
@@ -172,19 +179,11 @@ def ScaleBalancing(strArr):
     return "not possible"
 
 
-def add_two(ws, key):
-    for i, _ in enumerate(ws):
-        if key + ws[i] in ws[i+1::]:
-            return "{},{}".format(ws[i], key + ws[i])
-        if key - ws[i] in ws[i+1::]:
-            return "{},{}".format(ws[i], key - ws[i])
-
-
 def VowelSquare(strArr):
     """Have the function VowelSquare(strArr) take the strArr parameter being
     passed which will be a 2D matrix of some arbitrary size filled with
     letters from the alphabet, and determine if a 2x2 square composed entirely
-    of vowels exists in the matrix. For example: strArr is 
+    of vowels exists in the matrix. For example: strArr is
     ["abcd", "eikr", "oufj"]
     then this matrix looks like the following:
 
@@ -192,11 +191,12 @@ def VowelSquare(strArr):
     e i k r
     o u f j
 
-    Within this matrix there is a 2x2 square of vowels starting in the second row
-    and first column, namely, ei, ou. If a 2x2 square of vowels is found your program
-    should return the top-left position (row-column) of the square, so for this example
-    your program should return 1-0. If no 2x2 square of vowels exists, then return
-    the string not found. If there are multiple squares of vowels, return the one that
+    Within this matrix there is a 2x2 square of vowels starting in the second
+    row and first column, namely, ei, ou. If a 2x2 square of vowels is found
+    your program should return the top-left position (row-column) of
+    the square, so for this example your program should return 1-0.
+    If no 2x2 square of vowels exists, then return the string not found.
+    If there are multiple squares of vowels, return the one that
     is at the most top-left position in the whole matrix. The input matrix will
     at least be of size 2x2.
     """
@@ -281,5 +281,227 @@ def QuestionsMarks(str):
     return 'true' if has_ten else 'false'
 
 
+def FindIntersection(strArr):
+    """Have the function FindIntersection(strArr) read the array of strings
+    stored in strArr which will contain 2 elements: the first element will
+    represent a list of comma-separated numbers sorted in ascending order,
+    the second element will represent a second list of comma-separated numbers
+    (also sorted). Your goal is to return a comma-separated string containing
+    the numbers that occur in elements of strArr in sorted order.
+    If there is no intersection, return the string false.
+
+    For example: if strArr contains ["1, 3, 4, 7, 13", "1, 2, 4, 13, 15"]
+    the output should return "1,4,13" because those numbers appear
+    in both strings. The array given will not be empty,
+    and each string inside the array will be of numbers sorted in ascending
+    order and may contain negative numbers.
+    """
+    # code goes here
+    i_nums = [int(i_nums) for i_nums in strArr[0].split(', ')]
+    j_nums = [int(j_nums) for j_nums in strArr[1].split(', ')]
+    i = 0
+    j = 0
+    common = []
+    while(i < len(i_nums) and j < len(j_nums)):
+        if i_nums[i] == j_nums[j]:
+            common.append(str(i_nums[i]))
+            i += 1
+            j += 1
+        elif i_nums[i] < j_nums[j]:
+            i += 1
+        else:
+            j += 1
+    return ','.join(common) if len(common) > 0 else 'false'
+
+
+def EquivalentKeypresses(strArr):
+    """Have the function EquivalentKeypresses(strArr) read the array of
+    strings stored in strArr which will contain 2 strings representing
+    two comma separated lists of keypresses. Your goal is to return the
+    string true if the keypresses produce the same printable string and
+    the string false if they do not. A keypress can be either a printable
+    character or a backspace represented by -B. You can produce a
+    printable string from such a string of keypresses by having backspaces
+    erase one preceding character.
+
+    For example: if strArr contains ["a,b,c,d", "a,b,c,c,-B,d"]
+    the output should return true because those keypresses produce
+    the same printable string. The array given will not be empty.
+    The keypresses will only contain letters from the alphabet and backspaces.
+    """
+    # code goes here
+    def backspace(ls: list):
+        new = []
+        for i, _ in enumerate(ls):
+            if '-B' == ls[i]:
+                if i > 0:
+                    new = new[0:len(new) - 1]
+                else:
+                    continue
+            else:
+                new.append(ls[i])
+        return new
+
+    i_strs = [x for x in strArr[0].split(',') if x != '']
+    j_strs = [y for y in strArr[1].split(',') if y != '']
+    if '-B' in i_strs:
+        i_strs = backspace(i_strs)
+    if '-B' in j_strs:
+        j_strs = backspace(j_strs)
+    return 'true' if j_strs == i_strs else 'false'
+
+
+def KaprekarsConstant(num):
+    """Have the function KaprekarsConstant(num) take the num parameter
+    being passed which will be a 4-digit number with at least two distinct
+    digits. Your program should perform the following routine on the
+    number: Arrange the digits in descending order and in ascending
+    order (adding zeroes to fit it to a 4-digit number), and subtract
+    the smaller number from the bigger number. Then repeat the previous
+    step. Performing this routine will always cause you to reach a fixed
+    number: 6174. Then performing the routine on 6174 will always give you
+    6174 (7641 - 1467 = 6174). Your program should return the number of times
+    this routine must be performed until 6174 is reached.
+    For example: if num is 3524 your program should return 3 because of
+    the following steps:
+    (1) 5432 - 2345 = 3087,
+    (2) 8730 - 0378 = 8352,
+    (3) 8532 - 2358 = 6174.
+    """
+    # code goes here
+
+    def kaprekars_helper(num, count):
+        num = [num for num in str(num)]
+        while len(num) < 4:
+            num.append('0')
+        num.sort()
+        x = int(''.join(num))
+        y = int(''.join(num[::-1]))
+        diff = abs(x-y)
+        if diff != 6174:
+            return kaprekars_helper(diff, count+1)
+        return count
+    return kaprekars_helper(num, 1)
+
+
+# def KaprekarsConstant(num):
+#     # code goes here
+#     counter = 0
+#     k = num
+#     while k != 6174:
+#         str_num = [i for i in str(k)]
+#         while len(str_num) < 4:
+#             str_num.append("0")
+#         ascend = int("".join(sorted(str_num)))
+#         descend = int("".join(sorted(str_num, reverse=True)))
+#         if ascend > descend:
+#             k = ascend-descend
+#         else:
+#             k = descend-ascend
+#         counter += 1
+#     return counter
+
+
+def ChessboardTraveling(str):
+    """Have the function ChessboardTraveling(str) read str
+    which will be a string consisting of the location of
+    a space on a standard 8x8 chess board with no pieces on
+    the board along with another space on the chess board.
+    The structure of str will be the following: "(x y)(a b)"
+    where (x y) represents the position you are currently on
+    with x and y ranging from 1 to 8 and (a b) represents some
+    other space on the chess board with a and b also ranging
+    from 1 to 8 where a > x and b > y. Your program should
+    determine how many ways there are of traveling from (x y)
+    on the board to (a b) moving only up and to the right.
+    For example: if str is (1 1)(2 2) then your program should
+    output 2 because there are only two possible ways to travel from
+    space (1 1) on a chessboard to space (2 2) while making only
+    moves up and to the right.
+    """
+    # code goes here
+    import math
+
+    def show(p, n):
+        board = ''
+        (px, py) = p
+        (a, b) = n
+        for i in reversed(range(8)):
+            for j in range(8):
+                if i+1 == px and j+1 == py:
+                    board += 'I '
+                elif i+1 == a and j+1 == b:
+                    board += 'E '
+                else:
+                    board += '- '
+                if j == 7:
+                    board += '\n'
+        print(board)
+    px, py, a, b = [int(x) for x in str if x.isnumeric()]
+    assert(a > px and b > py)
+    # show((px, py), (a, b))
+
+    num_r = a - px
+    num_u = b - py
+
+    return int(math.factorial(num_u + num_r) /
+               (math.factorial(num_u)*math.factorial(num_r)))
+
+
+def MaximalSquare(strArr):
+    """Have the function MaximalSquare(strArr) take the strArr parameter
+    being passed which will be a 2D matrix of 0 and 1's, and determine the
+    area of the largest square submatrix that contains all 1's. A square
+    submatrix is one of equal width and height, and your program should return
+    the area of the largest submatrix that contains only 1's. For example:
+    if strArr is ["10100", "10111", "11111", "10010"] then this looks like the
+    following matrix:
+
+    1 0 1 0 0
+    1 0 1 1 1
+    1 1 1 1 1
+    1 0 0 1 0
+
+    For the input above, you can see the bolded 1's create the largest square
+    submatrix of size 2x2, so your program should return the area which is 4.
+    You can assume the input will not be empty.
+    """
+    # code goes here
+    # opt 1
+    # rows = len(strArr)
+    # columns = len(strArr[0]) if rows > 0 else 0
+
+    # dp = [[0 for j in range(columns)] for i in range(rows)]
+    # maxlen = 0
+
+    # for i in range(rows):
+    #     for j in range(columns):
+    #         if i == 0 or j == 0:
+    #             dp[i][j] = int(strArr[i][j])
+    #         if i > 0 and j > 0 and int(strArr[i][j]) == 1:
+    #             dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
+    #             maxlen = max(dp[i][j], maxlen)
+
+    # return maxlen * maxlen
+    # opt 2
+    rows = len(strArr)
+    columns = len(strArr[0]) if rows > 0 else 0
+    dp = [0 for j in range(columns)]
+    maxlen = 0
+    prev = 0
+
+    for i in range(rows):
+        for j in range(columns):
+            temp = dp[j]
+            if i > 0 and j > 0 and int(strArr[i][j]) == 1:
+                dp[j] = min(dp[j], dp[j-1], prev) + 1
+                maxlen = max(dp[j], maxlen)
+            else:
+                dp[j] = int(strArr[i][j])
+            prev = temp
+
+    return maxlen * maxlen
+
+
 # keep this function call here
-print(QuestionsMarks('9???1???9??1???9'))
+print(MaximalSquare(["0111", "1101", "0111"]))

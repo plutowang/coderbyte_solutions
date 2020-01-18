@@ -7,4 +7,5 @@
     "python.formatting.provider": "autopep8",
     "html.format.enable": true,
     "autoDocstring.docstringFormat": "sphinx",
+    "python.pythonPath": "/usr/local/bin/python3",
 }
