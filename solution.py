@@ -467,9 +467,41 @@ def MaximalSquare(strArr):
     You can assume the input will not be empty.
     """
     # code goes here
+    # opt 1
+    # rows = len(strArr)
+    # columns = len(strArr[0]) if rows > 0 else 0
 
-    return strArr
+    # dp = [[0 for j in range(columns)] for i in range(rows)]
+    # maxlen = 0
+
+    # for i in range(rows):
+    #     for j in range(columns):
+    #         if i == 0 or j == 0:
+    #             dp[i][j] = int(strArr[i][j])
+    #         if i > 0 and j > 0 and int(strArr[i][j]) == 1:
+    #             dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
+    #             maxlen = max(dp[i][j], maxlen)
+
+    # return maxlen * maxlen
+    # opt 2
+    rows = len(strArr)
+    columns = len(strArr[0]) if rows > 0 else 0
+    dp = [0 for j in range(columns)]
+    maxlen = 0
+    prev = 0
+
+    for i in range(rows):
+        for j in range(columns):
+            temp = dp[j]
+            if i > 0 and j > 0 and int(strArr[i][j]) == 1:
+                dp[j] = min(dp[j], dp[j-1], prev) + 1
+                maxlen = max(dp[j], maxlen)
+            else:
+                dp[j] = int(strArr[i][j])
+            prev = temp
+
+    return maxlen * maxlen
 
 
 # keep this function call here
-print(MaximalSquare(["0111", "1111", "1111", "1111"]))
+print(MaximalSquare(["0111", "1101", "0111"]))
